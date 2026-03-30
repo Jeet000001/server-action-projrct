@@ -11,25 +11,22 @@ import { createContact } from "@/actions/ContactAction"
 const Contact_form = () => {
     const [isSubmit, setIsSubmit] = useState(false)
     const [message, setMessage] = useState("")
-    const [isSuccess, setIsSuccess] = useState(false)
 
-    const onSubmit = async (e) => {
-        e.preventDefault()
-        setIsSubmit(true)
+    const onSubmit = async (formData) => {
+        setIsSubmit(true);
         setMessage("")
 
-        const formData = new FormData(e.target)
-        const result = await createContact(formData)
+        const result = await createContact(formData);
+        console.log(result);
+
 
         if (result.success) {
-            setIsSuccess(true)
             setMessage("Message sent successfully")
-            e.target.reset()
+            const form = document.getElementById("contact-form");
+            form.reset()
         } else {
-            setIsSuccess(false)
             setMessage(result.error || "Something went wrong")
         }
-
         setIsSubmit(false)
     }
 
@@ -45,9 +42,7 @@ const Contact_form = () => {
                 </CardHeader>
 
                 <CardContent className="px-10 pt-8 pb-10">
-                    <form id="contact-form" onSubmit={onSubmit} className="flex flex-col gap-5">
-
-                        {/* Name + Email row */}
+                    <form id="contact-form" action={onSubmit} className="flex flex-col gap-5">
                         <div className="grid grid-cols-2 gap-4">
                             <div className="flex flex-col gap-1.5">
                                 <Label
@@ -66,7 +61,6 @@ const Contact_form = () => {
                                     className="bg-[#1c1c1c] border border-[#2a2a2a] rounded-sm px-3.5 py-2.5 text-sm font-light text-[#e8e2d9] placeholder:text-[#3a3835] focus-visible:ring-0 focus-visible:border-[#c8a96e] focus-visible:shadow-[0_0_0_3px_rgba(200,169,110,0.08)] transition-all disabled:opacity-45"
                                 />
                             </div>
-
                             <div className="flex flex-col gap-1.5">
                                 <Label
                                     htmlFor="email"
@@ -85,8 +79,6 @@ const Contact_form = () => {
                                 />
                             </div>
                         </div>
-
-                        {/* Subject */}
                         <div className="flex flex-col gap-1.5">
                             <Label
                                 htmlFor="subject"
@@ -104,8 +96,6 @@ const Contact_form = () => {
                                 className="bg-[#1c1c1c] border border-[#2a2a2a] rounded-sm px-3.5 py-2.5 text-sm font-light text-[#e8e2d9] placeholder:text-[#3a3835] focus-visible:ring-0 focus-visible:border-[#c8a96e] focus-visible:shadow-[0_0_0_3px_rgba(200,169,110,0.08)] transition-all disabled:opacity-45"
                             />
                         </div>
-
-                        {/* Message */}
                         <div className="flex flex-col gap-1.5">
                             <Label
                                 htmlFor="message"
@@ -122,8 +112,6 @@ const Contact_form = () => {
                                 className="bg-[#1c1c1c] border border-[#2a2a2a] rounded-sm px-3.5 py-2.5 text-sm font-light text-[#e8e2d9] placeholder:text-[#3a3835] min-h-[110px] leading-relaxed focus-visible:ring-0 focus-visible:border-[#c8a96e] focus-visible:shadow-[0_0_0_3px_rgba(200,169,110,0.08)] transition-all disabled:opacity-45 resize-y"
                             />
                         </div>
-
-                        {/* Submit Button */}
                         <Button
                             type="submit"
                             disabled={isSubmit}
@@ -131,16 +119,11 @@ const Contact_form = () => {
                         >
                             {isSubmit ? "Sending..." : "Send Message"}
                         </Button>
-
-                        {/* Status Message — single, color based on success/error */}
                         {message && (
-                            <p className={`text-center text-[0.82rem] tracking-wide animate-in fade-in duration-300 ${
-                                isSuccess ? "text-[#c8a96e]" : "text-red-400"
-                            }`}>
+                            <p className="text-center text-[0.82rem] text-[#c8a96e] tracking-wide animate-in fade-in duration-300">
                                 {message}
                             </p>
                         )}
-
                     </form>
                 </CardContent>
             </Card>
