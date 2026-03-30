@@ -6,16 +6,31 @@ import { Label } from "./ui/label"
 import { Input } from "./ui/input"
 import { Textarea } from "./ui/textarea"
 import { Button } from "./ui/button"
+import { createContact } from "@/actions/ContactAction"
 
 const Contact_form = () => {
     const [isSubmit, setIsSubmit] = useState(false)
     const [message, setMessage] = useState("")
+    const [isSuccess, setIsSuccess] = useState(false)
 
     const onSubmit = async (e) => {
         e.preventDefault()
         setIsSubmit(true)
+        setMessage("")
+
         const formData = new FormData(e.target)
-        // your submit logic here
+        const result = await createContact(formData)
+
+        if (result.success) {
+            setIsSuccess(true)
+            setMessage("Message sent successfully")
+            e.target.reset()
+        } else {
+            setIsSuccess(false)
+            setMessage(result.error || "Something went wrong")
+        }
+
+        setIsSubmit(false)
     }
 
     return (
@@ -30,7 +45,7 @@ const Contact_form = () => {
                 </CardHeader>
 
                 <CardContent className="px-10 pt-8 pb-10">
-                    <form onSubmit={onSubmit} className="flex flex-col gap-5">
+                    <form id="contact-form" onSubmit={onSubmit} className="flex flex-col gap-5">
 
                         {/* Name + Email row */}
                         <div className="grid grid-cols-2 gap-4">
@@ -117,12 +132,15 @@ const Contact_form = () => {
                             {isSubmit ? "Sending..." : "Send Message"}
                         </Button>
 
-                        {/* Success message */}
+                        {/* Status Message — single, color based on success/error */}
                         {message && (
-                            <p className="text-center text-[0.82rem] text-[#c8a96e] tracking-wide animate-in fade-in duration-300">
+                            <p className={`text-center text-[0.82rem] tracking-wide animate-in fade-in duration-300 ${
+                                isSuccess ? "text-[#c8a96e]" : "text-red-400"
+                            }`}>
                                 {message}
                             </p>
                         )}
+
                     </form>
                 </CardContent>
             </Card>

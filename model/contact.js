@@ -13,7 +13,7 @@ const ContactShema = new mongoose.Schema(
       required: [true, "Email is Required"],
       trim: true,
       lowercase: true,
-      match: [/^\S+@\S+\.S+$/, "Please enter a valid email"],
+      match: [/^\S+@\S+\.\S+$/, "Please enter a valid email"],
     },
     subject: {
       type: String,
@@ -36,5 +36,5 @@ const ContactShema = new mongoose.Schema(
   { timestamps: true },
 );
 
-const Contact =
-  mongoose.model.Contact || mongoose.model("Contact", ContactShema);
+export const Contact =
+  mongoose.models.Contact || mongoose.model("Contact", ContactShema);

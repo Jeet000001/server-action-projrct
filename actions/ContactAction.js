@@ -1,7 +1,7 @@
 "use server";
 
 import dbConnect from "@/lib/dbConnection";
-import Contact from "@/model/contact";
+import { Contact } from "@/model/contact";
 
 export const createContact = async (formData) => {
   try {
@@ -14,7 +14,7 @@ export const createContact = async (formData) => {
     if (!name || !email || !subject || !message) {
       return {
         success: false,
-        error: "All fields are required4",
+        error: "All fields are required",
       };
     }
 
