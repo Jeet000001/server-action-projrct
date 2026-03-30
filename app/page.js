@@ -1,8 +1,4 @@
-import dbConnect from "@/lib/dbConnection";
-import React from "react";
-
-const page = async () => {
-  await dbConnect();
+const page = () => {
   return <div>page</div>;
 };
 
